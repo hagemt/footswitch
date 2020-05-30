@@ -314,14 +314,22 @@ static const keymap_entry keymap[] =
 #define KEYMAP_SIZE (sizeof(keymap)/sizeof(keymap_entry))
 
 Bool parse_modifier(const char *arg, enum modifier *mod) {
-    if (strcasecmp("ctrl", arg) == 0) {
+    if (arg == NULL || mod == NULL) {
+        return 0;
+    } else if (strcasecmp("command", arg) == 0) {
+        *mod = SUPER;
+        return 1;
+    } else if (strcasecmp("super", arg) == 0) {
+        *mod = SUPER;
+        return 1;
+    } else if (strcasecmp("ctrl", arg) == 0) {
         *mod = CTRL;
         return 1;
     } else if (strcasecmp("alt", arg) == 0) {
         *mod = ALT;
         return 1;
     } else if (strcasecmp("win", arg) == 0) {
-        *mod = WIN;
+        *mod = SUPER;
         return 1;
     } else if (strcasecmp("shift", arg) == 0) {
         *mod = SHIFT;

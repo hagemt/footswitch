@@ -26,7 +26,7 @@ enum modifier {
     CTRL = 1,
     SHIFT = 2,
     ALT = 4,
-    WIN = 8,
+    SUPER = 8,
 };
 
 enum mouse_button {

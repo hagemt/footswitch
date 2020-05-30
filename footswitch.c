@@ -176,8 +176,8 @@ void print_key(unsigned char data[]) {
     if ((data[2] & ALT) != 0) {
         strcat(combo, "alt+");
     }
-    if ((data[2] & WIN) != 0) {
-        strcat(combo, "win+");
+    if ((data[2] & SUPER) != 0) {
+        strcat(combo, "super+");
     }
     if (data[3] != 0) {
         const char *key = decode_byte(data[3]);
