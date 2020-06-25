@@ -184,7 +184,9 @@ static const keymap_entry keymap[] =
     {"XF86AudioRaiseVolume", 0x80},
     {"XF86AudioLowerVolume", 0x81},
     {"<82>",        0x82},
+    {"Hangul",      0x82},
     {"<83>",        0x83},
+    {"Hangul_Hanja",0x83},
     {"A",           0x84},
     {"B",           0x85},
     {"C",           0x86},
@@ -313,49 +315,65 @@ static const keymap_entry keymap[] =
 
 #define KEYMAP_SIZE (sizeof(keymap)/sizeof(keymap_entry))
 
-Bool parse_modifier(const char *arg, enum modifier *mod) {
-    if (arg == NULL || mod == NULL) {
-        return 0;
-    } else if (strcasecmp("command", arg) == 0) {
-        *mod = SUPER;
-        return 1;
-    } else if (strcasecmp("super", arg) == 0) {
-        *mod = SUPER;
-        return 1;
-    } else if (strcasecmp("ctrl", arg) == 0) {
-        *mod = CTRL;
-        return 1;
-    } else if (strcasecmp("alt", arg) == 0) {
-        *mod = ALT;
-        return 1;
-    } else if (strcasecmp("win", arg) == 0) {
-        *mod = SUPER;
-        return 1;
-    } else if (strcasecmp("shift", arg) == 0) {
-        *mod = SHIFT;
-        return 1;
-    }
-    return 0;
+bool parse_modifier(const char *arg, enum modifier *mod) {
+	if (arg == NULL || mod == NULL) return 0;
+
+	else if (strcasecmp("alt",           arg) == 0) *mod = MOD_L_OPTION;
+	else if (strcasecmp("apple",         arg) == 0) *mod = MOD_L_COMMAND;
+	else if (strcasecmp("command",       arg) == 0) *mod = MOD_L_COMMAND;
+	else if (strcasecmp("control",       arg) == 0) *mod = MOD_L_CTRL;
+	else if (strcasecmp("ctrl",          arg) == 0) *mod = MOD_L_CTRL;
+	else if (strcasecmp("option",        arg) == 0) *mod = MOD_L_OPTION;
+	else if (strcasecmp("shift",         arg) == 0) *mod = MOD_L_SHIFT;
+	else if (strcasecmp("super",         arg) == 0) *mod = MOD_L_COMMAND;
+	else if (strcasecmp("win",           arg) == 0) *mod = MOD_L_COMMAND;
+	else if (strcasecmp("windows",       arg) == 0) *mod = MOD_L_COMMAND;
+
+	else if (strcasecmp("left_alt",      arg) == 0) *mod = MOD_L_OPTION;
+	else if (strcasecmp("left_apple",    arg) == 0) *mod = MOD_L_COMMAND;
+	else if (strcasecmp("left_command",  arg) == 0) *mod = MOD_L_COMMAND;
+	else if (strcasecmp("left_control",  arg) == 0) *mod = MOD_L_CTRL;
+	else if (strcasecmp("left_ctrl",     arg) == 0) *mod = MOD_L_CTRL;
+	else if (strcasecmp("left_option",   arg) == 0) *mod = MOD_L_OPTION;
+	else if (strcasecmp("left_shift",    arg) == 0) *mod = MOD_L_SHIFT;
+	else if (strcasecmp("left_super",    arg) == 0) *mod = MOD_L_COMMAND;
+	else if (strcasecmp("left_win",      arg) == 0) *mod = MOD_L_COMMAND;
+	else if (strcasecmp("left_windows",  arg) == 0) *mod = MOD_L_COMMAND;
+
+	else if (strcasecmp("right_alt",     arg) == 0) *mod = MOD_R_OPTION;
+	else if (strcasecmp("right_apple",   arg) == 0) *mod = MOD_R_COMMAND;
+	else if (strcasecmp("right_command", arg) == 0) *mod = MOD_R_COMMAND;
+	else if (strcasecmp("right_control", arg) == 0) *mod = MOD_R_CTRL;
+	else if (strcasecmp("right_ctrl",    arg) == 0) *mod = MOD_R_CTRL;
+	else if (strcasecmp("right_option",  arg) == 0) *mod = MOD_R_OPTION;
+	else if (strcasecmp("right_shift",   arg) == 0) *mod = MOD_R_SHIFT;
+	else if (strcasecmp("right_super",   arg) == 0) *mod = MOD_R_COMMAND;
+	else if (strcasecmp("right_win",     arg) == 0) *mod = MOD_R_COMMAND;
+	else if (strcasecmp("right_windows", arg) == 0) *mod = MOD_R_COMMAND;
+
+	else {
+		(void) fprintf(stderr, "[WARNING] unknown modifier: %s\n", arg);
+		return 0;
+	}
+	return 1;
 }
 
-Bool parse_mouse_button(const char *arg, enum mouse_button *btn) {
-    if (strcasecmp("mouse_left", arg) == 0) {
-        *btn = MOUSE_LEFT;
-        return 1;
-    } else if (strcasecmp("mouse_middle", arg) == 0) {
-        *btn = MOUSE_MIDDLE;
-        return 1;
-    } else if (strcasecmp("mouse_right", arg) == 0) {
-        *btn = MOUSE_RIGHT;
-        return 1;
-    } else if (strcasecmp("mouse_double", arg) == 0) {
-        *btn = MOUSE_DOUBLE;
-        return 1;
-    }
-    return 0;
+bool parse_mouse_button(const char *arg, enum mouse_button *btn) {
+	if (arg == NULL || btn == NULL) return 0;
+
+	else if (strcasecmp("mouse_double", arg) == 0) *btn = BTN_D_MOUSE;
+	else if (strcasecmp("mouse_left",   arg) == 0) *btn = BTN_L_MOUSE;
+	else if (strcasecmp("mouse_middle", arg) == 0) *btn = BTN_M_MOUSE;
+	else if (strcasecmp("mouse_right",  arg) == 0) *btn = BTN_R_MOUSE;
+
+	else {
+		(void) fprintf(stderr, "[WARNING] unknown button: %s\n", arg);
+		return 0;
+	}
+	return 1;
 }
 
-static Bool encode_char(const char ch, unsigned char *b) {
+static bool encode_char(const char ch, unsigned char *b) {
     for (size_t i = 0 ; i < KEYMAP_SIZE ; i++) {
         if (strlen(keymap[i].name) == 1 && keymap[i].name[0] == ch) {
             *b = keymap[i].value;
@@ -365,7 +383,7 @@ static Bool encode_char(const char ch, unsigned char *b) {
     return 0;
 }
 
-Bool encode_string(const char *str, unsigned char *arr) {
+bool encode_string(const char *str, unsigned char *arr) {
     for (size_t i = 0 ; i < strlen(str) ; i++) {
         if (!encode_char(str[i], &arr[i])) {
             return 0;
@@ -374,7 +392,7 @@ Bool encode_string(const char *str, unsigned char *arr) {
     return 1;
 }
 
-Bool encode_key(const char *key, unsigned char *b) {
+bool encode_key(const char *key, unsigned char *b) {
     for (size_t i = 0 ; i < KEYMAP_SIZE ; i++) {
         if (strcasecmp(keymap[i].name, key) != 0) {
             continue;

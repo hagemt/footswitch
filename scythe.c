@@ -92,18 +92,17 @@ void print_key(unsigned char data[])
 {
     char combo[128] = {0};
     int ind = 3;
-    if ((data[1] & CTRL) != 0) {
-        strcat(combo, "ctrl+");
-    }
-    if ((data[1] & SHIFT) != 0) {
-        strcat(combo, "shift+");
-    }
-    if ((data[1] & ALT) != 0) {
-        strcat(combo, "alt+");
-    }
-    if ((data[1] & SUPER) != 0) {
-        strcat(combo, "super+");
-    }
+
+    if ((data[1] & MOD_L_CTRL)    != 0) strcat(combo, "left_control+");
+    if ((data[1] & MOD_L_SHIFT)   != 0) strcat(combo, "left_shift+");
+    if ((data[1] & MOD_L_OPTION)  != 0) strcat(combo, "left_option+");
+    if ((data[1] & MOD_L_COMMAND) != 0) strcat(combo, "left_command+");
+
+    if ((data[1] & MOD_R_CTRL)    != 0) strcat(combo, "right_control+");
+    if ((data[1] & MOD_R_SHIFT)   != 0) strcat(combo, "right_shift+");
+    if ((data[1] & MOD_R_OPTION)  != 0) strcat(combo, "right_option+");
+    if ((data[1] & MOD_R_COMMAND) != 0) strcat(combo, "right_command+");
+
     while (data[ind] != 0 && ind <= 7) {
         const char *key = decode_byte(data[ind]);
         strcat(combo, key);
@@ -220,16 +219,16 @@ void compile_mouse_button(const char *btn_str)
     }
     pedals[curr_pedal].data[1] = curr_pedal + 1;
     switch (btn) {
-        case MOUSE_LEFT:
+        case BTN_L_MOUSE:
             pedals[curr_pedal].data[4] = 0x81;
             break;
-        case MOUSE_RIGHT:
+        case BTN_R_MOUSE:
             pedals[curr_pedal].data[4] = 0x82;
             break;
-        case MOUSE_MIDDLE:
+        case BTN_M_MOUSE:
             pedals[curr_pedal].data[4] = 0x84;
             break;
-        case MOUSE_DOUBLE:
+        case BTN_D_MOUSE:
             pedals[curr_pedal].data[4] = 0x80;
             break;
     }

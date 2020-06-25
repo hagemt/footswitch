@@ -22,29 +22,33 @@ THE SOFTWARE.
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
+#include <stdbool.h>
+
 enum modifier {
-    CTRL = 1,
-    SHIFT = 2,
-    ALT = 4,
-    SUPER = 8,
+    MOD_L_CTRL    = 1,
+    MOD_L_SHIFT   = 2,
+    MOD_L_OPTION  = 4, // ALT
+    MOD_L_COMMAND = 8, // SUPER
+
+    MOD_R_CTRL    = 16,
+    MOD_R_SHIFT   = 32,
+    MOD_R_OPTION  = 64,
+    MOD_R_COMMAND = 128,
 };
 
 enum mouse_button {
-    MOUSE_LEFT = 1,
-    MOUSE_RIGHT = 2,
-    MOUSE_MIDDLE = 4,
-    MOUSE_DOUBLE = 8,
+    BTN_L_MOUSE = 1, // left
+    BTN_R_MOUSE = 2, // right
+    BTN_M_MOUSE = 4, // middle
+    BTN_D_MOUSE = 8, // double
 };
 
-typedef unsigned char Bool;
+bool parse_modifier(const char *, enum modifier *);
+bool parse_mouse_button(const char *, enum mouse_button *);
 
-Bool parse_modifier(const char *arg, enum modifier *mod);
-Bool parse_mouse_button(const char *arg, enum mouse_button *btn);
+bool encode_string(const char *, unsigned char *);
+bool encode_key(const char *, unsigned char *);
 
-Bool encode_string(const char *str, unsigned char *arr);
-
-Bool encode_key(const char *key, unsigned char *b);
-
-const char* decode_byte(unsigned char b);
+const char * decode_byte(unsigned char);
 
 #endif

@@ -51,7 +51,7 @@ test: sane footswitch
 
 # configure macOS screenshot
 shot: sane footswitch
-	./footswitch -m shift -m win -k 3
+	./footswitch -m command -m shift -k 3
 .PHONY: shot
 
 # configure left arrow

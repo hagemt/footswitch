@@ -63,8 +63,8 @@ void usage() {
         "   -S rstring  - append the specified raw string (hex numbers delimited with spaces)\n"
         "   -a key      - append the specified key\n"
         "   -k key      - write the specified key\n"
-        "   -m modifier - ctrl|shift|alt|win\n"
-        "   -b button   - mouse_left|mouse_middle|mouse_right\n"
+        "   -m modifier - {|left_|right_}command|control|option|shift (multiple modifiers allowed)\n"
+        "   -b button   - mouse_left|mouse_middle|mouse_right|mouse_double\n"
         "   -x X        - move the mouse cursor horizontally by X pixels\n"
         "   -y Y        - move the mouse cursor vertically by Y pixels\n"
         "   -w W        - move the mouse wheel by W\n\n"
@@ -161,25 +161,24 @@ void print_mouse(unsigned char data[]) {
 
 void print_key(unsigned char data[]) {
     char combo[128] = {0};
-    if ((data[2] & CTRL) != 0) {
-        strcat(combo, "ctrl+");
-    }
-    if ((data[2] & SHIFT) != 0) {
-        strcat(combo, "shift+");
-    }
-    if ((data[2] & ALT) != 0) {
-        strcat(combo, "alt+");
-    }
-    if ((data[2] & SUPER) != 0) {
-        strcat(combo, "super+");
-    }
+
+    if ((data[2] & MOD_L_CTRL)    != 0) strcat(combo, "left_control+");
+    if ((data[2] & MOD_L_SHIFT)   != 0) strcat(combo, "left_shift+");
+    if ((data[2] & MOD_L_OPTION)  != 0) strcat(combo, "left_option+");
+    if ((data[2] & MOD_L_COMMAND) != 0) strcat(combo, "left_command+");
+
+    if ((data[2] & MOD_R_CTRL)    != 0) strcat(combo, "right_control+");
+    if ((data[2] & MOD_R_SHIFT)   != 0) strcat(combo, "right_shift+");
+    if ((data[2] & MOD_R_OPTION)  != 0) strcat(combo, "right_option+");
+    if ((data[2] & MOD_R_COMMAND) != 0) strcat(combo, "right_command+");
+
     if (data[3] != 0) {
         const char *key = decode_byte(data[3]);
         strcat(combo, key);
     } else {
         size_t len = strlen(combo);
         if (len > 0) {
-            combo[len - 1] = 0; // remove the last +
+            combo[len - 1] = '\0'; // remove the last +
         }
     }
     printf("%s", combo);
@@ -260,7 +259,7 @@ void read_pedals() {
  *   KEY_TYPE | MOUSE_TYPE,
  *   STRING_TYPE
  */
-Bool set_pedal_type(unsigned char new_type) {
+bool set_pedal_type(unsigned char new_type) {
     unsigned char *curr_type = &curr_pedal->data[1];
     // check if there is no type set (default)
     if (*curr_type == 0) {
