@@ -356,8 +356,7 @@ Bool parse_mouse_button(const char *arg, enum mouse_button *btn) {
 }
 
 static Bool encode_char(const char ch, unsigned char *b) {
-    int i;
-    for (i = 0 ; i < KEYMAP_SIZE ; i++) {
+    for (size_t i = 0 ; i < KEYMAP_SIZE ; i++) {
         if (strlen(keymap[i].name) == 1 && keymap[i].name[0] == ch) {
             *b = keymap[i].value;
             return 1;
@@ -367,8 +366,7 @@ static Bool encode_char(const char ch, unsigned char *b) {
 }
 
 Bool encode_string(const char *str, unsigned char *arr) {
-    int i;
-    for (i = 0 ; i < strlen(str) ; i++) {
+    for (size_t i = 0 ; i < strlen(str) ; i++) {
         if (!encode_char(str[i], &arr[i])) {
             return 0;
         }
@@ -377,8 +375,7 @@ Bool encode_string(const char *str, unsigned char *arr) {
 }
 
 Bool encode_key(const char *key, unsigned char *b) {
-    int i;
-    for (i = 0 ; i < KEYMAP_SIZE ; i++) {
+    for (size_t i = 0 ; i < KEYMAP_SIZE ; i++) {
         if (strcasecmp(keymap[i].name, key) != 0) {
             continue;
         }
@@ -389,8 +386,7 @@ Bool encode_key(const char *key, unsigned char *b) {
 }
 
 const char* decode_byte(unsigned char b) {
-    int i;
-    for (i = 0 ; i < KEYMAP_SIZE ; i++) {
+    for (size_t i = 0 ; i < KEYMAP_SIZE ; i++) {
         if (keymap[i].value == b) {
             return keymap[i].name;
         }

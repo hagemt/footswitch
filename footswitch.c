@@ -44,8 +44,8 @@ typedef struct pedal_protocol
     pedal_data pedals[3];
 } pedal_protocol;
 
-pedal_protocol pd = {{0}};
-pedal_data *curr_pedal = &pd.pedals[1]; // start at the second pedal
+pedal_protocol pd = {{0}, {}}; // 2nd:
+pedal_data *curr_pedal = &pd.pedals[1];
 
 // KEY and MOUSE types can be combined
 #define KEY_TYPE    1
@@ -94,8 +94,7 @@ void init() {
         {0x413d, 0x2107},
         {0x1a86, 0xe026},
     };
-    int i = 0;
-    for (i = 0 ; i < sizeof(vid_pid) / sizeof(vid_pid[0]) ; i++) {
+    for (size_t i = 0 ; i < sizeof(vid_pid) / sizeof(vid_pid[0]) ; i++) {
         init_pid(vid_pid[i][0], vid_pid[i][1]);
         if (dev != NULL) {
             break;
@@ -452,7 +451,7 @@ void write_pedal(pedal_data *pedal) {
 }
 
 void write_pedals() {
-    /*
+    ///*
     int i = 0;
     printf("start: ");
     debug_arr(pd.start, 8);
@@ -462,7 +461,7 @@ void write_pedals() {
         printf("pedal %d data: ", i+1);
         debug_arr(pd.pedals[i].data, pd.pedals[i].data_len);
     }
-    */
+    //*/
     usb_write(pd.start);
     usleep(1000*1000);
     write_pedal(&pd.pedals[0]);

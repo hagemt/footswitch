@@ -1,36 +1,38 @@
 [![Build Status](https://travis-ci.org/rgerganov/footswitch.svg?branch=master)](https://travis-ci.org/rgerganov/footswitch)
 
-Footswitch
-----------
+Foot Switch
+-----------
 
-Command line utlities for programming [PCsensor][1] and Scythe foot switches. There is support for both single pedal devices and three pedal devices. Use the `footswitch` binary for the following combinations of `vendorId:productId`:
+Command line utilities for programming [PCsensor][1] and Scythe foot switches.
+There is support for both single pedal devices and three pedal devices.
+Use the `footswitch` binary for the following vendor + product IDs:
 
  * `0c45:7403`
  * `0c45:7404`
  * `413d:2107`
 
-Scythe switches with `vendorId:productId`=`0426:3011` can be programmed with the `scythe` binary. You can find the `vendorId` and `productId` of your device using the `lsusb` command on Linux.
+Scythe switches w/ IDs: `0426:3011` are programmable with the `scythe` binary.
+On macOS: `brew install lsusb`. On Windows, read libusb or Microsoft's docs.
+You can find the vendor / product IDs of your device using the `lsusb`.
 
-The same kind of foot switches are used for building the popular [VIM Clutch][2].
+These foot switches are also used for building the popular [vim clutch][2].
 
 Building
 --------
 
-The programs are using the [hidapi][3] library and should work on Linux and OSX. To build on Linux:
+Targets link dynamically with the [hidapi][3] library and are tested on macOS:
 
-    sudo apt-get install libhidapi-dev
-    git clone https://github.com/rgerganov/footswitch.git
-    cd footswitch
-    make
-    sudo make install
+    git clone https://github.com/hagemt/footswitch.git
+    make test -C footswitch
+    sudo make install -C footswitch
 
-To build on OSX:
+This works on most BSD + *nix variants (and maybe even Windows 10 via Cygwin):
+* install your distribution's packaged HID library or build from source
+* `sudo apt-get install libhidapi-dev` or `sudo pacman -S hidapi` on Arch
 
-    brew install hidapi
-    git clone https://github.com/rgerganov/footswitch.git
-    cd footswitch
-    make
-    sudo make install
+Read https://cygwin.com/install.html w/ `git`, a C compiler like `gcc`, and:
+* pkg-config + modern hid.dll (development versions / debug symbols optional)
+* Note: Official (better-supported) GUIs from the hardware supplier may exist.
 
 Usage
 -----
@@ -119,8 +121,9 @@ Contributors
 -------
 * [Daniel Manjarres](mailto:danmanj@gmail.com)
 * Meng Zhang (wsxiaoys)
+* Tor Hagemann (hagemt)
 
 [1]: http://www.pcsensor.com/index.php?_a=viewCat&catId=2
 [2]: https://github.com/alevchuk/vim-clutch
-[3]: http://www.signal11.us/oss/hidapi/
+[3]: https://github.com/libusb/hidapi
 [4]: https://github.com/rgerganov/footswitch/issues/26#issuecomment-401429709
